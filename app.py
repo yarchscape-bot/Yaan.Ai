@@ -1,6 +1,6 @@
 import streamlit as st
-import requests
-import json
+from google import genai
+from google.genai import types
 
 # Page Config (Luxury Studio Standard)
 st.set_page_config(page_title="YAAN.AI // Spatial Generative Canvas", layout="wide", initial_sidebar_state="collapsed")
@@ -30,7 +30,7 @@ div[data-testid="stForm"] { border: none !important; padding: 0 !important; }
 .gendo-executive-footer { width: 100%; text-align: center; padding: 50px 0; margin-top: 100px; border-top: 1px solid rgba(209, 203, 196, 0.07); font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; letter-spacing: 4px; color: #666666; text-transform: uppercase; }
 .gendo-executive-badge { color: #ffffff; font-weight: 700; letter-spacing: 5px; margin-left: 8px; }
 
-/* 📱 High-End Fluid Mobile Responsiveness Framework */
+/* 📱 Fluid Mobile Responsiveness Framework */
 @media screen and (max-width: 768px) {
     .gendo-studio-header { flex-direction: column; align-items: flex-start; padding: 20px; margin-bottom: 25px; gap: 15px; }
     .gendo-status-node { align-self: flex-start; width: auto; font-size: 0.65rem; padding: 4px 10px; white-space: normal; }
@@ -42,8 +42,6 @@ div[data-testid="stForm"] { border: none !important; padding: 0 !important; }
     .gendo-studio-panel { padding: 20px; margin-bottom: 20px; }
     .gendo-executive-footer { font-size: 0.7rem; letter-spacing: 2px; padding: 30px 10px; }
     .gendo-executive-badge { letter-spacing: 2px; display: block; margin-top: 5px; }
-    
-    /* Auto fixing default Streamlit elements inside small screens */
     div[data-testid="column"] { width: 100% !important; flex: 1 1 100% !important; }
     .stTable { display: block; overflow-x: auto; }
 }
@@ -82,27 +80,28 @@ with col_right:
     st.markdown('<h3 style="color:#fff; font-family:\'Space Grotesk\'; margin-top:0; font-size:1.4rem;">AI Engine Stream Output</h3>', unsafe_allow_html=True)
     if trigger_execution and user_prompt:
         API_KEY = "AIzaSyBFr1Yv3vyASdom-MdrhPUhwTuBlPDlPvs"
-        API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
         
         system_instruction = "You are YAAN.AI, a premium spatial engineering and architectural AI specialist built by Executive Chief Founder Mr Kevil Solanki. Keep your answers ultra-professional, mathematically accurate, and specifically helpful for Gujarat academic universities (CEPT, Nirma, MSU, SCET, etc.) and real estate corporates (Adani, Shivalik, Avadh). Do not use emojis."
         
-        payload = {
-            "contents": [{"parts": [{"text": user_prompt}]}],
-            "systemInstruction": {"parts": [{"text": system_instruction}]}
-        }
-        headers = {"Content-Type": "application/json"}
-        
         with st.spinner("Processing architectural data layers..."):
             try:
-                response = requests.post(API_URL, headers=headers, json=payload)
-                if response.status_code == 200:
-                    response_json = response.json()
-                    ai_text = response_json['candidates'][0]['content']['parts'][0]['text']
-                    st.write(ai_text)
+                # Initializing Official Google GenAI Native Client
+                client = genai.Client(api_key=API_KEY)
+                
+                response = client.models.generate_content(
+                    model='gemini-1.5-flash',
+                    contents=user_prompt,
+                    config=types.GenerateContentConfig(
+                        system_instruction=system_instruction
+                    )
+                )
+                
+                if response.text:
+                    st.write(response.text)
                 else:
-                    st.error(f"Engine Exception Code {response.status_code}: {response.text}")
+                    st.warning("Engine computed an empty response structure.")
             except Exception as e:
-                st.error(f"System Routing Error: {str(e)}")
+                st.error(f"System Operational Exception: {str(e)}")
     else:
         st.info("System Idle. Enter your query on the left and execute the engine flow.")
     st.markdown("</div>", unsafe_allow_html=True)
