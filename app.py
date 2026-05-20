@@ -134,3 +134,49 @@ with tab_corporates:
 
 # --- SIGNATURE FOOTER ---
 st.markdown(f'<div class="gendo-executive-footer">SYSTEM CONTROL CORE OPERATED BY CHIEF EXECUTIVE FOUNDER: <span class="gendo-executive-badge">MR KEVIL SOLANKI</span></div>', unsafe_allow_html=True)
+import streamlit as st
+from google import genai
+from google.genai import types
+
+# Page Config
+st.set_page_config(page_title="YAAN.AI", layout="wide")
+
+# UI Layout
+st.markdown("<h1 style='text-align:center;'>YAAN.AI</h1>", unsafe_allow_html=True)
+col_left, col_right = st.columns(2)
+
+with col_left:
+    # Form ke andar button define kar rahe hain
+    with st.form(key="ai_form"):
+        user_prompt = st.text_area("Ask YAAN.AI (Gujarati/Hindi/English)...", height=150)
+        trigger_execution = st.form_submit_button("EXECUTE COMPUTATION FLOW")
+
+with col_right:
+    # Form submit hone par hi ye logic chalega
+    if trigger_execution:
+        if user_prompt:
+            try:
+                # Secrets se secure access
+                api_key = st.secrets["GEMINI_API_KEY"]
+                client = genai.Client(api_key=api_key)
+                
+                # Instruction matrix (Multi-lingual)
+                system_instruction = """
+                You are YAAN.AI, a premium spatial engineering and architectural AI. 
+                Language Rules: Reply in the same language the user asks (Gujarati, Hindi, or English).
+                Keep answers professional, accurate, and helpful for Gujarat academic/real estate contexts. No emojis.
+                """
+                
+                with st.spinner("Processing..."):
+                    response = client.models.generate_content(
+                        model='gemini-1.5-flash',
+                        contents=user_prompt,
+                        config=types.GenerateContentConfig(system_instruction=system_instruction)
+                    )
+                    st.write(response.text)
+            except Exception as e:
+                st.error(f"Error: {e}")
+        else:
+            st.warning("Please enter a query.")
+    else:
+        st.info("System Idle. Enter your query and click Execute.")
