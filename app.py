@@ -11,7 +11,11 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=300;400;500;600;700&family=Plus+Jakarta+Sans:wght=300;400;500;600&display=swap');
 .stApp { background-color: #000000 !important; color: #d1cbc4 !important; font-family: 'Plus Jakarta Sans', sans-serif; }
 .gendo-studio-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 48px; border-bottom: 1px solid rgba(209, 203, 196, 0.08); background-color: #000000; margin-bottom: 40px; }
-.gendo-brand-main { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.2rem; font-weight: 700; letter-spacing: 1px; color: #ffffff; }
+.gendo-brand-main { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.2rem; font-weight: 700; letter-spacing: 1px; color: #ffffff; line-height: 1.1; }
+.gendo-brand-tagline { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 400; color: #888888; margin-top: 6px; letter-spacing: 0.5px; }
+.gendo-brand-founder { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 400; color: #555555; margin-top: 4px; letter-spacing: 1px; }
+.gendo-brand-founder a { color: #888888; text-decoration: none; border-bottom: 1px dashed rgba(136,136,136,0.3); }
+.gendo-brand-founder a:hover { color: #ffffff; }
 .gendo-status-node { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #888888; border: 1px solid rgba(209, 203, 196, 0.15); padding: 6px 16px; background: rgba(255, 255, 255, 0.02); }
 .gendo-hero-title { font-family: 'Space Grotesk', sans-serif; font-size: 4.8rem; font-weight: 400; letter-spacing: -3px; text-align: center; color: #ffffff; margin-top: 20px; }
 .gendo-hero-sub { font-size: 1.15rem; color: #7a7a7a; text-align: center; margin-bottom: 60px; font-weight: 300; }
@@ -24,8 +28,19 @@ div[data-testid="stForm"] { border: none !important; padding: 0 !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# --- HEADER ---
-st.markdown('<div class="gendo-studio-header"><div class="gendo-brand-container"><div class="gendo-brand-main">YAAN.AI</div></div><div class="gendo-status-node">State-Scale Spatial Intelligence Terminal</div></div>', unsafe_allow_html=True)
+# --- HEADER WITH NEW BRAND TAGLINES & FOUNDER NODES ---
+header_html = """
+<div class="gendo-studio-header">
+    <div class="gendo-brand-container">
+        <div class="gendo-brand-main">YAAN.AI</div>
+        <div class="gendo-brand-tagline">Stories of the [Arts]<br>The Art of Space. The Science of Possibility.&reg;</div>
+        <div class="gendo-brand-founder">Meet Kevil : <a href="mailto:kevilhere@gmail.com">kevilhere@gmail.com</a></div>
+    </div>
+    <div class="gendo-status-node">State-Scale Spatial Intelligence Terminal</div>
+</div>
+"""
+st.markdown(header_html, unsafe_allow_html=True)
+
 st.markdown("<h1 class='gendo-hero-title'>Spatial Generative Studio</h1>", unsafe_allow_html=True)
 st.markdown("<p class='gendo-hero-sub'>Autonomous blueprint diagnostic engine and academic tracking matrices</p>", unsafe_allow_html=True)
 
@@ -45,12 +60,11 @@ with col_right:
     st.markdown('<h3 style="color:#fff; font-family:\'Space Grotesk\'; margin-top:0;">AI Engine Stream Output</h3>', unsafe_allow_html=True)
     if trigger_execution and user_prompt:
         API_KEY = "AIzaSyBFr1Yv3vyASdom-MdrhPUhwTuBlPDlPvs"
-        # Using stable v1beta URL structure for direct structured requests
         API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
         
         system_instruction = "You are YAAN.AI, a premium spatial engineering and architectural AI specialist built by Executive Chief Founder Mr Kevil Solanki. Keep your answers ultra-professional, mathematically accurate, and specifically helpful for Gujarat academic universities (CEPT, Nirma, MSU, SCET, etc.) and real estate corporates (Adani, Shivalik, Avadh). Do not use emojis."
         
-        # Validated Correct V1/V1Beta Google Schema payload structural blueprint
+        # Safe v1beta structure for dynamic input requests
         payload = {
             "contents": [{
                 "parts": [{"text": user_prompt}]
