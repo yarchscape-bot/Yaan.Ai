@@ -45,14 +45,19 @@ with col_right:
     st.markdown('<h3 style="color:#fff; font-family:\'Space Grotesk\'; margin-top:0;">AI Engine Stream Output</h3>', unsafe_allow_html=True)
     if trigger_execution and user_prompt:
         API_KEY = "AIzaSyBFr1Yv3vyASdom-MdrhPUhwTuBlPDlPvs"
-        # FIXED: In v1 architecture, the URL pattern uses 'v1/models/gemini-1.5-flash:generateContent'
-        API_URL = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={API_KEY}"
+        # Using stable v1beta URL structure for direct structured requests
+        API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
         
         system_instruction = "You are YAAN.AI, a premium spatial engineering and architectural AI specialist built by Executive Chief Founder Mr Kevil Solanki. Keep your answers ultra-professional, mathematically accurate, and specifically helpful for Gujarat academic universities (CEPT, Nirma, MSU, SCET, etc.) and real estate corporates (Adani, Shivalik, Avadh). Do not use emojis."
         
+        # Validated Correct V1/V1Beta Google Schema payload structural blueprint
         payload = {
-            "contents": [{"parts": [{"text": user_prompt}]}],
-            "systemInstruction": {"parts": [{"text": system_instruction}]}
+            "contents": [{
+                "parts": [{"text": user_prompt}]
+            }],
+            "systemInstruction": {
+                "parts": [{"text": system_instruction}]
+            }
         }
         headers = {"Content-Type": "application/json"}
         
