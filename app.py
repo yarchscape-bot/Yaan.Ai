@@ -49,10 +49,10 @@ with col_left:
     st.markdown("<div class='gendo-studio-panel'>", unsafe_allow_html=True)
     st.markdown("<h3 style='color:#fff; font-family:\"Space Grotesk\"; margin-top:0;'>AI Terminal Core</h3>", unsafe_allow_html=True)
     
-    # Simple Query Form
     with st.form(key="ai_form", clear_on_submit=False):
         user_prompt = st.text_area("Ask YAAN.AI (e.g., Explain CEPT portfolio submission guidelines or Adani Realty infrastructure layouts)...", height=180)
-trigger_execution = st.form_submit_button("EXECUTE COMPUTATION FLOW")        
+        trigger_execution = st.form_submit_button("EXECUTE COMPUTATION FLOW")
+        
     st.markdown("</div>", unsafe_allow_html=True)
 
 with col_right:
@@ -61,7 +61,6 @@ with col_right:
     
     if trigger_execution and user_prompt:
         try:
-            # Automatic connection to Gemini with your Key
             model_blueprint = genai.GenerativeModel(
                 model_name="gemini-1.5-flash",
                 system_instruction="You are YAAN.AI, a premium spatial engineering and architectural AI specialist built by Executive Chief Founder Mr Kevil Solanki. Keep your answers ultra-professional, mathematically accurate, and specifically helpful for Gujarat academic universities (CEPT, Nirma, MSU, SCET, etc.) and real estate corporates (Adani, Shivalik, Avadh). Do not use emojis."
@@ -75,7 +74,7 @@ with col_right:
         st.info("System Idle. Enter your query on the left and execute the engine flow.")
     st.markdown("</div>", unsafe_allow_html=True)
 
-# --- RESOURCE DIRECTORIES (TABLE FORM MATRIX) ---
+# --- RESOURCE DIRECTORIES ---
 st.write("---")
 st.markdown("<h2 style='text-align:center; font-family:\"Space Grotesk\"; font-weight:300; color:#ffffff;'>Institutional & Corporate Environments</h2>", unsafe_allow_html=True)
 
