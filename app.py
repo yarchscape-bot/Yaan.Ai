@@ -1,5 +1,6 @@
 import streamlit as st
-import google.generativeai as genai
+import requests
+import json
 
 # Page Config (Luxury Studio Standard)
 st.set_page_config(
@@ -8,14 +9,10 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Hardcoded Secure API Key Registration
-API_KEY = "AIzaSyBFr1Yv3vyASdom-MdrhPUhwTuBlPDlPvs"
-genai.configure(api_key=API_KEY)
-
 # Core Master Stylesheet
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
 .stApp { background-color: #000000 !important; color: #d1cbc4 !important; font-family: 'Plus Jakarta Sans', sans-serif; }
 .gendo-studio-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 48px; border-bottom: 1px solid rgba(209, 203, 196, 0.08); background-color: #000000; margin-bottom: 40px; }
 .gendo-brand-main { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.2rem; font-weight: 700; letter-spacing: 1px; color: #ffffff; }
@@ -60,48 +57,34 @@ with col_right:
     st.markdown("<h3 style='color:#fff; font-family:\"Space Grotesk\"; margin-top:0;'>AI Engine Stream Output</h3>", unsafe_allow_html=True)
     
     if trigger_execution and user_prompt:
-        try:
-            # Explicit modern generation pipeline mapping
-            model_blueprint = genai.GenerativeModel(
-                model_name="models/gemini-1.5-flash-latest",
-                system_instruction="You are YAAN.AI, a premium spatial engineering and architectural AI specialist built by Executive Chief Founder Mr Kevil Solanki. Keep your answers ultra-professional, mathematically accurate, and specifically helpful for Gujarat academic universities (CEPT, Nirma, MSU, SCET, etc.) and real estate corporates (Adani, Shivalik, Avadh). Do not use emojis."
-            )
-            with st.spinner("Processing architectural data layers..."):
-                ai_response = model_blueprint.generate_content(user_prompt)
-                st.write(ai_response.text)
-        except Exception as e:
-            st.error(f"Engine Interruption: {str(e)}")
+        # Secure API Routing
+        API_KEY = "AIzaSyBFr1Yv3vyASdom-MdrhPUhwTuBlPDlPvs"
+        API_URL = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={API_KEY}"
+        
+        system_instruction = "You are YAAN.AI, a premium spatial engineering and architectural AI specialist built by Executive Chief Founder Mr Kevil Solanki. Keep your answers ultra-professional, mathematically accurate, and specifically helpful for Gujarat academic universities (CEPT, Nirma, MSU, SCET, etc.) and real estate corporates (Adani, Shivalik, Avadh). Do not use emojis."
+        
+        # Payload construction
+        payload = {
+            "contents": [{"parts": [{"text": user_prompt}]}],
+            "systemInstruction": {"parts": [{"text": system_instruction}]}
+        }
+        headers = {"Content-Type": "application/json"}
+        
+        with st.spinner("Processing architectural data layers..."):
+            try:
+                response = requests.post(API_URL, headers=headers, json=payload)
+                if response.status_code == 200:
+                    response_json = response.json()
+                    ai_text = response_json['candidates'][0]['content']['parts'][0]['text']
+                    st.write(ai_text)
+                else:
+                    st.error(f"Engine Exception Code {response.status_code}: {response.text}")
+            except Exception as e:
+                st.error(f"System Routing Error: {str(e)}")
     else:
         st.info("System Idle. Enter your query on the left and execute the engine flow.")
     st.markdown("</div>", unsafe_allow_html=True)
 
 # --- RESOURCE DIRECTORIES ---
 st.write("---")
-st.markdown("<h2 style='text-align:center; font-family:\"Space Grotesk\"; font-weight:300; color:#ffffff;'>Institutional & Corporate Environments</h2>", unsafe_allow_html=True)
-
-tab_academics, tab_corporates = st.tabs(["Gujarat Academic Repository Matrix", "Real Estate Enterprise Directories"])
-
-with tab_academics:
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.table([
-        {"University Node": "CEPT University, Ahmedabad", "Core Studio Focus": "Advanced Urbanism, Transit Hub Design", "Jury Defense Parameter": "High focus on volumetric density and circulation math"},
-        {"University Node": "Nirma University", "Core Studio Focus": "High-Rise Structures, Lateral Load Integrity", "Jury Defense Parameter": "Demands rigid structural stability calculations"},
-        {"University Node": "MSU Baroda", "Core Studio Focus": "Heritage Conservation & Vernacular Forms", "Jury Defense Parameter": "Requires clean measured drawings and history logs"},
-        {"University Node": "SCET, Surat", "Core Studio Focus": "Coastal Urban Habitats, Flood Resilience", "Jury Defense Parameter": "Contextual planning adaptations for tidal baselines"}
-    ])
-
-with tab_corporates:
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.table([
-        {"Enterprise Node": "Adani Realty", "Chief Executive / Founder": "Mr. Gautam Adani", "Portfolio Domain Focus": "Mega-scale industrial townships & high-volume smart cities"},
-        {"Enterprise Node": "Shivalik Group", "Chief Executive / Founder": "Mr. Chitrak Shah", "Portfolio Domain Focus": "Iconic high-rise downtown commercial properties & zero-column facades"},
-        {"Enterprise Node": "Avadh Group", "Chief Executive / Founder": "Mr. Lavjibhai Daliya (Badshah)", "Portfolio Domain Focus": "Premium luxury lifestyle schemes & macro Vastu layout systems"},
-        {"Enterprise Node": "Bakeri Group", "Chief Executive / Founder": "Mr. Anil Bakeri", "Portfolio Domain Focus": "Pioneering horizontal housing townships & passive micro-grids"}
-    ])
-
-# --- SIGNATURE FOOTER ---
-st.markdown(f"""
-<div class="gendo-executive-footer">
-    SYSTEM CONTROL CORE OPERATED BY CHIEF EXECUTIVE FOUNDER: <span class="gendo-executive-badge">MR KEVIL SOLANKI</span>
-</div>
-""", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align:center; font-family:\"Space Grotesk\"; font-weight
