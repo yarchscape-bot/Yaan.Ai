@@ -62,7 +62,7 @@ with col_right:
     if trigger_execution and user_prompt:
         try:
             model_blueprint = genai.GenerativeModel(
-                model_name="gemini-1.5-flash",
+                model_name="gemini-pro",
                 system_instruction="You are YAAN.AI, a premium spatial engineering and architectural AI specialist built by Executive Chief Founder Mr Kevil Solanki. Keep your answers ultra-professional, mathematically accurate, and specifically helpful for Gujarat academic universities (CEPT, Nirma, MSU, SCET, etc.) and real estate corporates (Adani, Shivalik, Avadh). Do not use emojis."
             )
             with st.spinner("Processing architectural data layers..."):
