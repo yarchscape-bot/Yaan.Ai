@@ -85,11 +85,11 @@ with col_right:
         
         with st.spinner("Processing architectural data layers..."):
             try:
-                # Initializing Official Google GenAI Native Client
+                # Direct generation using simplified standard routing structure
                 client = genai.Client(api_key=API_KEY)
                 
                 response = client.models.generate_content(
-                    model='gemini-1.5-flash',
+                    model='gemini-2.5-flash',
                     contents=user_prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=system_instruction
