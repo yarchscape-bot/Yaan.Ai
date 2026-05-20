@@ -52,8 +52,7 @@ with col_left:
     # Simple Query Form
     with st.form(key="ai_form", clear_on_submit=False):
         user_prompt = st.text_area("Ask YAAN.AI (e.g., Explain CEPT portfolio submission guidelines or Adani Realty infrastructure layouts)...", height=180)
-        trigger_execution = st.form_submit_submit_button("EXECUTE COMPUTATION FLOW")
-        
+trigger_execution = st.form_submit_button("EXECUTE COMPUTATION FLOW")        
     st.markdown("</div>", unsafe_allow_html=True)
 
 with col_right:
