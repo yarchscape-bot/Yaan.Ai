@@ -79,13 +79,13 @@ with col_right:
     st.markdown("<div class='gendo-studio-panel'>", unsafe_allow_html=True)
     st.markdown('<h3 style="color:#fff; font-family:\'Space Grotesk\'; margin-top:0; font-size:1.4rem;">AI Engine Stream Output</h3>', unsafe_allow_html=True)
     if trigger_execution and user_prompt:
-        API_KEY = "AIzaSyBFr1Yv3vyASdom-MdrhPUhwTuBlPDlPvs"
+        # NEW ACTIVE RE-GENERATED API KEY EMBEDDED
+        API_KEY = "AIzaSyCelu_k9VJDAwMvK4XhmgHtiAXH7YCBotQ"
         
         system_instruction = "You are YAAN.AI, a premium spatial engineering and architectural AI specialist built by Executive Chief Founder Mr Kevil Solanki. Keep your answers ultra-professional, mathematically accurate, and specifically helpful for Gujarat academic universities (CEPT, Nirma, MSU, SCET, etc.) and real estate corporates (Adani, Shivalik, Avadh). Do not use emojis."
         
         with st.spinner("Processing architectural data layers..."):
             try:
-                # Direct generation using simplified standard routing structure
                 client = genai.Client(api_key=API_KEY)
                 
                 response = client.models.generate_content(
